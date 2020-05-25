@@ -1,4 +1,4 @@
 <?php
 
 
-echo "it works";
+require_once "src/Controller/Controller.php";
