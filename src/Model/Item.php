@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 class Item{
-    private int $id;
-    private string $name;
-    private float $price_per_unit;
+    private $id;
+    private $name;
+    private $price_per_unit;
 
     public function __construct(int $id, string $name, float $price_per_unit){
         $this->id = $id;
