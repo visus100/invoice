@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 class Invoice{
-    private int $id;
-    private int $company_id;
-    private array $seller_data;
+    private $id;
+    private $company_id;
+    private $seller_data;
 
     public function __construct(int $id, int $company_id, array $seller_data){
         $this->id = $id;

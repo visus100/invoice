@@ -6,10 +6,10 @@ require_once "Person.php";
 
 class Worker extends Person{
 
-    private float $salary;
-    private array $permissions;
-    private bool $active;
-    private string $work_position;
+    private $salary;
+    private $permissions;
+    private $active;
+    private $work_position;
 
 
     public function __construct(int $id, string $name, string $surname, string $phone, float $salary, array $permissions,  $active, $work_position)

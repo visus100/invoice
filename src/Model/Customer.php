@@ -6,7 +6,7 @@ require_once "Person.php";
 
 class Customer extends Person{
 
-    private string $address;
+    private $address;
 
 
     public function __construct(int $id, string $name, string $surname, string $phone, string $address)
