@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-class Order{
+class Order_item{
     private int $id;
     private date $date_of_order;
 

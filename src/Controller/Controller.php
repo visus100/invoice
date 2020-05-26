@@ -7,7 +7,7 @@ require_once "src/Model/Customer.php";
 require_once "src/Model/Company.php";
 require_once "src/Model/Invoice.php";
 require_once "src/Model/Item.php";
-require_once "src/Model/Order.php";
+require_once "src/Model/Order_item.php";
 
 $worker = new Worker(1, "test", "test", "123123123", 2000.20, ["może" =>true], true, "employee");
 
@@ -19,7 +19,7 @@ $invoice = new Invoice(1, 1, ["itemowania", "Gdynia"]);
 
 $item = new Item(1, "bulbulator", 220);
 
-$order = new Order(1);
+$order_item = new Order_item(1);
 
 var_dump($worker);
 
@@ -33,7 +33,7 @@ echo "<br>";
 var_dump($item);
 
 echo "<br>";
-var_dump($order);
+var_dump($order_item);
 
 echo "<br>";
 
