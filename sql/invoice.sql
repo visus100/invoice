@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 26 Maj 2020, 20:54
+-- Czas generowania: 26 Maj 2020, 21:35
 -- Wersja serwera: 5.6.26
 -- Wersja PHP: 7.2.19
 
@@ -81,7 +81,7 @@ CREATE TABLE `invoice` (
   `id` int(11) NOT NULL,
   `invoice_number` varchar(50) NOT NULL,
   `id_company` int(11) NOT NULL,
-  `id_orders` int(11) NOT NULL,
+  `id_purchase` int(11) NOT NULL,
   `id_worker` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -89,7 +89,7 @@ CREATE TABLE `invoice` (
 -- Zrzut danych tabeli `invoice`
 --
 
-INSERT INTO `invoice` (`id`, `invoice_number`, `id_company`, `id_orders`, `id_worker`) VALUES
+INSERT INTO `invoice` (`id`, `invoice_number`, `id_company`, `id_purchase`, `id_worker`) VALUES
 (1, 'IN_0001', 1, 1, 2),
 (2, 'IN_0002', 3, 2, 3);
 
@@ -143,53 +143,6 @@ INSERT INTO `item` (`id`, `name`, `price_per_unit`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `orders`
---
-
-CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
-  `date_of_order` date NOT NULL,
-  `id_worker` int(11) NOT NULL,
-  `id_customer` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Zrzut danych tabeli `orders`
---
-
-INSERT INTO `orders` (`id`, `date_of_order`, `id_worker`, `id_customer`) VALUES
-(1, '2020-05-11', 2, 1),
-(2, '2020-05-19', 1, 1),
-(3, '2020-05-16', 3, 4);
-
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `orders_item`
---
-
-CREATE TABLE `orders_item` (
-  `id` int(11) NOT NULL,
-  `id_orders` int(11) NOT NULL,
-  `id_item` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Zrzut danych tabeli `orders_item`
---
-
-INSERT INTO `orders_item` (`id`, `id_orders`, `id_item`) VALUES
-(1, 1, 2),
-(2, 1, 3),
-(3, 1, 5),
-(4, 1, 5),
-(5, 2, 3),
-(6, 3, 7),
-(7, 3, 8);
-
--- --------------------------------------------------------
-
---
 -- Struktura tabeli dla tabeli `permission`
 --
 
@@ -211,6 +164,53 @@ INSERT INTO `permission` (`id`, `perm_administrator`, `perm_orders`, `perm_invoi
 (3, 1, 1, 1, 1),
 (4, 0, 1, 1, 1),
 (5, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `purchase`
+--
+
+CREATE TABLE `purchase` (
+  `id` int(11) NOT NULL,
+  `date_of_order` date NOT NULL,
+  `id_worker` int(11) NOT NULL,
+  `id_customer` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `purchase`
+--
+
+INSERT INTO `purchase` (`id`, `date_of_order`, `id_worker`, `id_customer`) VALUES
+(1, '2020-05-11', 2, 1),
+(2, '2020-05-19', 1, 1),
+(3, '2020-05-16', 3, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `purchase_item`
+--
+
+CREATE TABLE `purchase_item` (
+  `id` int(11) NOT NULL,
+  `id_orders` int(11) NOT NULL,
+  `id_item` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `purchase_item`
+--
+
+INSERT INTO `purchase_item` (`id`, `id_orders`, `id_item`) VALUES
+(1, 1, 2),
+(2, 1, 3),
+(3, 1, 5),
+(4, 1, 5),
+(5, 2, 3),
+(6, 3, 7),
+(7, 3, 8);
 
 -- --------------------------------------------------------
 
@@ -274,21 +274,21 @@ ALTER TABLE `item`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeksy dla tabeli `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeksy dla tabeli `orders_item`
---
-ALTER TABLE `orders_item`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indeksy dla tabeli `permission`
 --
 ALTER TABLE `permission`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `purchase`
+--
+ALTER TABLE `purchase`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `purchase_item`
+--
+ALTER TABLE `purchase_item`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -332,22 +332,22 @@ ALTER TABLE `item`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT dla tabeli `orders`
---
-ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT dla tabeli `orders_item`
---
-ALTER TABLE `orders_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
 -- AUTO_INCREMENT dla tabeli `permission`
 --
 ALTER TABLE `permission`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT dla tabeli `purchase`
+--
+ALTER TABLE `purchase`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT dla tabeli `purchase_item`
+--
+ALTER TABLE `purchase_item`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT dla tabeli `worker`

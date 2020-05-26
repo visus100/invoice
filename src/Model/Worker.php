@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 require_once "Person.php";
 
-class Worker extends Person{
+class Worker extends Person
+{
 
     private float $salary;
     private array $permissions;
@@ -26,7 +27,7 @@ class Worker extends Person{
 
     public function get_personal_data(int $id): array
     {
-        $data = ["name"=>$this->name, "surname"=>$this->surname, "phone"=>$this->phone, "salary" =>$this->salary, "permissions" =>$this->permissions, "active" =>$this->active, "work_position" =>$this->work_position];
+        $data = ["name" => $this->name, "surname" => $this->surname, "phone" => $this->phone, "salary" => $this->salary, "permissions" => $this->permissions, "active" => $this->active, "work_position" => $this->work_position];
 
         return $data;
     }
