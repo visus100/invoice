@@ -11,6 +11,8 @@ require_once "src/Model/Company.php";
 require_once "src/Model/Invoice.php";
 require_once "src/Model/Item.php";
 require_once "src/Model/Purchase.php";
+require_once "src/Utils/debug.php";
+
 
 $worker = new Worker(1, "test", "test", "123123123", 2000.20, ["może" => true], true, "employee");
 
@@ -23,6 +25,8 @@ $company->testConnection($configuration);
 
 $invoice = new Invoice(1, ["Itemowania", "Gdynia"]);
 $invoice->addCompany($company);
+
+dump($invoice);  //funkcja sprawdzająca
 
 $item = new Item(1, "bulbulator", 220);
 

@@ -16,6 +16,8 @@ class Invoice{
             $this->company = $company;
 
             $company->addInvoice($this);
+
+            dump($this->company); //funkcja sprawdzająca
         }
 
     }
