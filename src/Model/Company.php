@@ -8,8 +8,24 @@ class Company extends AbstractModel
     private $id;
     private $name;
     private $nip;   //long have to be changed for string if use countrycode (like pl9519595534)
+    private $invoices = [];
 
+    public function addInvoice(Invoice $invoice):void
+    {   
 
+        if(!in_array($invoice, $this->invoices)){  
+            
+            $this->invoices[] = $invoice;
+
+            $invoice->addCompany($this);
+            echo "<br><br>";
+            var_dump($this->invoices);
+    
+            echo "<br><br>";
+        }
+
+    }
+    
     public function testConnection(array $config): void
     {
         $this->startSQLConnection($config);

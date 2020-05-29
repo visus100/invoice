@@ -20,7 +20,9 @@ $company = new Company(1, "Frakpol S.A.", "9519519511");
 $company->testConnection($configuration);
 
 
-$invoice = new Invoice(1, 1, ["Itemowania", "Gdynia"]);
+
+$invoice = new Invoice(1, ["Itemowania", "Gdynia"]);
+$invoice->addCompany($company);
 
 $item = new Item(1, "bulbulator", 220);
 

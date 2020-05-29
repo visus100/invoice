@@ -4,12 +4,24 @@ declare(strict_types=1);
 
 class Invoice{
     private $id;
-    private $company_id;
     private $seller_data;
 
-    public function __construct(int $id, int $company_id, array $seller_data){
+    private $company;
+
+    public function addCompany(Company $company):void
+    {   
+
+        if(!$this->company){ 
+            
+            $this->company = $company;
+
+            $company->addInvoice($this);
+        }
+
+    }
+
+    public function __construct(int $id, array $seller_data){
         $this->id = $id;
-        $this->company_id = $company_id;
         $this->seller_data = $seller_data;
     }
 
