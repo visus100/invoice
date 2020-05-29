@@ -108,7 +108,7 @@ date_of_order: date (YYYY-MM-DD)
     <panel_attributes>purchase_item
 --
 id: int
--id_orders: int
+-id_purchase: int
 -id_item: int</panel_attributes>
     <additional_attributes/>
   </element>

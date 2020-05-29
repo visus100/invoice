@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 26 Maj 2020, 21:35
+-- Czas generowania: 29 Maj 2020, 21:56
 -- Wersja serwera: 5.6.26
 -- Wersja PHP: 7.2.19
 
@@ -195,7 +195,7 @@ INSERT INTO `purchase` (`id`, `date_of_order`, `id_worker`, `id_customer`) VALUE
 
 CREATE TABLE `purchase_item` (
   `id` int(11) NOT NULL,
-  `id_orders` int(11) NOT NULL,
+  `id_purchase` int(11) NOT NULL,
   `id_item` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -203,7 +203,7 @@ CREATE TABLE `purchase_item` (
 -- Zrzut danych tabeli `purchase_item`
 --
 
-INSERT INTO `purchase_item` (`id`, `id_orders`, `id_item`) VALUES
+INSERT INTO `purchase_item` (`id`, `id_purchase`, `id_item`) VALUES
 (1, 1, 2),
 (2, 1, 3),
 (3, 1, 5),
@@ -259,13 +259,18 @@ ALTER TABLE `customer`
 -- Indeksy dla tabeli `invoice`
 --
 ALTER TABLE `invoice`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_worker` (`id_worker`),
+  ADD KEY `id_purchase` (`id_purchase`),
+  ADD KEY `id_company` (`id_company`);
 
 --
 -- Indeksy dla tabeli `invoice_item`
 --
 ALTER TABLE `invoice_item`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_item` (`id_item`),
+  ADD KEY `id_invoice` (`id_invoice`);
 
 --
 -- Indeksy dla tabeli `item`
@@ -283,19 +288,24 @@ ALTER TABLE `permission`
 -- Indeksy dla tabeli `purchase`
 --
 ALTER TABLE `purchase`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_worker` (`id_worker`),
+  ADD KEY `id_customer` (`id_customer`);
 
 --
 -- Indeksy dla tabeli `purchase_item`
 --
 ALTER TABLE `purchase_item`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_orders` (`id_purchase`),
+  ADD KEY `id_item` (`id_item`);
 
 --
 -- Indeksy dla tabeli `worker`
 --
 ALTER TABLE `worker`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `permission_id` (`permission_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -354,6 +364,44 @@ ALTER TABLE `purchase_item`
 --
 ALTER TABLE `worker`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Ograniczenia dla zrzutów tabel
+--
+
+--
+-- Ograniczenia dla tabeli `invoice`
+--
+ALTER TABLE `invoice`
+  ADD CONSTRAINT `invoice_ibfk_1` FOREIGN KEY (`id_company`) REFERENCES `company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `invoice_ibfk_2` FOREIGN KEY (`id_worker`) REFERENCES `worker` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ograniczenia dla tabeli `invoice_item`
+--
+ALTER TABLE `invoice_item`
+  ADD CONSTRAINT `invoice_item_ibfk_1` FOREIGN KEY (`id_item`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `invoice_item_ibfk_2` FOREIGN KEY (`id_invoice`) REFERENCES `invoice` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ograniczenia dla tabeli `purchase`
+--
+ALTER TABLE `purchase`
+  ADD CONSTRAINT `purchase_ibfk_1` FOREIGN KEY (`id_worker`) REFERENCES `worker` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `purchase_ibfk_2` FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ograniczenia dla tabeli `purchase_item`
+--
+ALTER TABLE `purchase_item`
+  ADD CONSTRAINT `purchase_item_ibfk_1` FOREIGN KEY (`id_item`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `purchase_item_ibfk_2` FOREIGN KEY (`id_purchase`) REFERENCES `purchase` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ograniczenia dla tabeli `worker`
+--
+ALTER TABLE `worker`
+  ADD CONSTRAINT `worker_ibfk_1` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
