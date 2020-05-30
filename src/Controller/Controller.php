@@ -23,22 +23,33 @@ $company->testConnection($configuration);
 
 
 
-$invoice = new Invoice(1, ["Itemowania", "Gdynia"]);
-$invoice->addCompany($company);
 
-dump($invoice);  //funkcja sprawdzająca
 
 $item = new Item(1, "bulbulator", 220);
 
 $purchase = new Purchase(1);
+$purchase->setCustomer($customer);
+$purchase->setWorker($worker);
+$purchase->createInvoice();
+$invoice = $purchase->getInvoice();
+$invoice->setCompany($company);
+
+
+dump($invoice);  //funkcja sprawdzająca
+dump($invoice->getCompany()->getCompanyData());
+
+echo "<br><br>worker data who created purchase get by association purchase with worker: <br>";
+dump($purchase->getWorker()->getWorkerData());
+echo "<br><br>single atribute from array: <br>";
+dump("name: " . $purchase->getWorker()->getWorkerData()['name']);
 
 var_dump($worker);
 
 echo "<br>";
 var_dump($company);
 
-echo "<br>";
-var_dump($invoice);
+// echo "<br>";
+// var_dump($invoice);
 
 echo "<br>";
 var_dump($item);
