@@ -12,20 +12,22 @@ class Company extends AbstractModel
 
     private static $company_list = [];
 
-    public function addInvoice(Invoice $invoice): void
+    public function add_invoice(Invoice $invoice): void
     {
 
         if (!in_array($invoice, $this->invoices)) {
 
             $this->invoices[] = $invoice;
 
-            $invoice->setCompany($this);
+            $invoice->set_company($this);
             echo "<br><br>";
             var_dump($this->invoices);
 
             echo "<br><br>";
         }
     }
+
+
     public function getInvoices(): array
     {
         return $this->invoices;
@@ -38,6 +40,15 @@ class Company extends AbstractModel
     public function get_array_list(): array
     {
         return self::$company_list;
+    }
+
+    public function get_invoices(): array
+    {
+        return $this->invoices;
+    }
+    public function get_company_data(): array
+    {
+        return $company_data = ["id" => $this->id, "name" => $this->name, "nip" => $this->nip];
     }
 
     public function testConnection(array $config): void

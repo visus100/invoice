@@ -10,14 +10,13 @@ class Customer extends Person
     private $address;
     private $purchases = [];
 
-
     private static $customer_list = [];
 
-    public function addPurchase(Purchase $purchase): void
+    public function add_purchase(Purchase $purchase): void
     {
         if (!in_array($purchase, $this->purchases)) {
             $this->purchases[] = $purchase;
-            $purchase->setCustomer($this);
+            $purchase->set_customer($this);
         }
     }
     public static function get_array_list(): array
