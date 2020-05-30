@@ -6,15 +6,15 @@
 
 abstract class AbstractModel
 {
-  protected $conn;
+  protected static $conn;
 
-  public function startSQLConnection(array $config): void
+  public static function startSQLConnection(array $config): void
   {
     try {
       $config = $config['db']; // undefined index fix
 
-      $this->validateConfig($config);
-      $this->createConnection($config);
+      self::validateConfig($config);
+      self::createConnection($config);
     } catch (PDOException $e) {
       echo 'Connection error';
     }
@@ -32,11 +32,11 @@ abstract class AbstractModel
     }
   }
  */
-  private function createConnection(array $config): void
+  private static function createConnection(array $config): void
   {
     $dsn = "mysql:dbname={$config['database']};host={$config['host']}";
 
-    $this->conn = new PDO(
+    self::$conn = new PDO(
       $dsn,
       $config['user'],
       $config['password'],
@@ -47,7 +47,7 @@ abstract class AbstractModel
     );
   }
 
-  private function validateConfig(array $config): void
+  private static function validateConfig(array $config): void
   {
 
     if (

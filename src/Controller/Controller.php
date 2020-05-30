@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 require_once "src/View/View.php";
-require_once "src/Model/Worker.php";
+/* require_once "src/Model/Worker.php";
 require_once "src/Model/Customer.php";
 require_once "src/Model/Company.php";
 require_once "src/Model/Invoice.php";
@@ -21,7 +21,7 @@ $purchase->set_customer($customer);
 $purchase->set_worker($worker);
 $purchase->create_invoice();
 $invoice = $purchase->get_invoice();
-$invoice->set_company($company);
+$invoice->set_company($company); */
 /*
 //worker data who created purchase get by association purchase with worker:
 dump($purchase->get_worker()->get_worker_data());
