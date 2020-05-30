@@ -53,6 +53,16 @@ class Customer extends Person
         }
     }
 
+    public static function new_object(int $id, string $name, string $surname, string $phone, string $address): void
+    {
+        //insert to db functions...
+
+        //if success
+        $new_obj = new self($id,  $name,  $surname,  $phone,  $address);
+        //else
+        //errorr
+    }
+
     public function __construct(int $id, string $name, string $surname, string $phone, string $address)
     {
         $this->id = $id;
