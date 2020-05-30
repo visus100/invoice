@@ -17,13 +17,21 @@ class Company extends AbstractModel
             
             $this->invoices[] = $invoice;
 
-            $invoice->addCompany($this);
+            $invoice->setCompany($this);
             echo "<br><br>";
             var_dump($this->invoices);
     
             echo "<br><br>";
         }
 
+    }
+    public function getInvoices():array
+    {
+        return $this->invoices;
+    }
+    public function getCompanyData():array
+    {
+        return $companyData = ["id"=>$this->id, "name"=>$this->name, "nip"=>$this->nip];
     }
     
     public function testConnection(array $config): void

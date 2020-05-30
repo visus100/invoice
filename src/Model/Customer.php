@@ -7,6 +7,15 @@ require_once "Person.php";
 class Customer extends Person{
 
     private $address;
+    private $purchases =[];
+
+    public function addPurchase(Purchase $purchase):void
+    {   
+        if(!in_array($purchase, $this->purchases)){
+            $this->purchases[]=$purchase;
+            $purchase->setCustomer($this);
+        }
+    }
 
 
     public function __construct(int $id, string $name, string $surname, string $phone, string $address)

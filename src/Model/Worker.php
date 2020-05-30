@@ -11,7 +11,36 @@ class Worker extends Person
     private $permissions;
     private $active;
     private $work_position;
+    private $purchases = [];
 
+    public function addPurchase(Purchase $purchase):void
+    {   
+        if(!in_array($purchase, $this->purchases)){
+            $this->purchases[]=$purchase;
+            $purchase->setWorker($this);
+        }
+    }
+
+    public function getWorkerData():array
+    {
+        $workerData["id"] = $this->id;
+        $workerData["name"] = $this->name;
+        $workerData["surname"] = $this->surname;
+        $workerData["phone"] = $this->phone;
+        $workerData["salary"] = $this->salary;
+        $workerData["permissions"] = $this->permissions;
+        $workerData["active"] = $this->active;
+        $workerData["work_position"] = $this->work_position;
+        return $workerData;
+    }
+
+    //use like up or down
+    public function get_personal_data(int $id): array
+    {
+        $data = ["name" => $this->name, "surname" => $this->surname, "phone" => $this->phone, "salary" => $this->salary, "permissions" => $this->permissions, "active" => $this->active, "work_position" => $this->work_position];
+
+        return $data;
+    }
 
     public function __construct(int $id, string $name, string $surname, string $phone, float $salary, array $permissions,  $active, $work_position)
     {
@@ -25,10 +54,5 @@ class Worker extends Person
         $this->work_position = $work_position;
     }
 
-    public function get_personal_data(int $id): array
-    {
-        $data = ["name" => $this->name, "surname" => $this->surname, "phone" => $this->phone, "salary" => $this->salary, "permissions" => $this->permissions, "active" => $this->active, "work_position" => $this->work_position];
 
-        return $data;
-    }
 }
