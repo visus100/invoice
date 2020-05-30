@@ -20,10 +20,6 @@ class Company extends AbstractModel
             $this->invoices[] = $invoice;
 
             $invoice->set_company($this);
-            echo "<br><br>";
-            var_dump($this->invoices);
-
-            echo "<br><br>";
         }
     }
 
