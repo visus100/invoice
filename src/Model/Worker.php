@@ -13,25 +13,25 @@ class Worker extends Person
     private $work_position;
     private $purchases = [];
 
-    public function addPurchase(Purchase $purchase):void
+    public function add_purchase(Purchase $purchase):void
     {   
         if(!in_array($purchase, $this->purchases)){
             $this->purchases[]=$purchase;
-            $purchase->setWorker($this);
+            $purchase->set_worker($this);
         }
     }
 
-    public function getWorkerData():array
+    public function get_worker_data():array
     {
-        $workerData["id"] = $this->id;
-        $workerData["name"] = $this->name;
-        $workerData["surname"] = $this->surname;
-        $workerData["phone"] = $this->phone;
-        $workerData["salary"] = $this->salary;
-        $workerData["permissions"] = $this->permissions;
-        $workerData["active"] = $this->active;
-        $workerData["work_position"] = $this->work_position;
-        return $workerData;
+        $worker_data["id"] = $this->id;
+        $worker_data["name"] = $this->name;
+        $worker_data["surname"] = $this->surname;
+        $worker_data["phone"] = $this->phone;
+        $worker_data["salary"] = $this->salary;
+        $worker_data["permissions"] = $this->permissions;
+        $worker_data["active"] = $this->active;
+        $worker_data["work_position"] = $this->work_position;
+        return $worker_data;
     }
 
     //use like up or down

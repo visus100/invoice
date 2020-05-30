@@ -3,41 +3,42 @@
 declare(strict_types=1);
 
 class Invoice{
-    private static $idCount = 1;
+    private static $id_count = 1;
     private $id;
-    private static $invoiceNumberHelper = 1;
-    private $invoiceNumber = "FRA/";
+    private static $invoice_number_helper = 1;
+    private $invoice_number = "FRA/";
     private static $seller_data = ["name"=>"Itemownia sp. z o.o.", "adress"=>"Fabryczna 5"];  //istotna zmiana
 
     private $company;
     private $purchase;
 
-    public function getInvoiceData():array
+    public function get_invoice_data():array
     {
-        $invoiceData = [$this->seller_data["name"], $this->seller_data["adress"], "id"=>$this->id, "invoice_number"=>$this->invoiceNumber];
-        return  $invoiceData;
+        $invoice_data = [$this->seller_data["name"], $this->seller_data["adress"], "id"=>$this->id, "invoice_number"=>$this->invoice_number];
+        return  $invoice_data;
     }
 
-    public function getCompany():Company
+
+    public function get_company():Company
     {
         return $this->company;
     }
 
-    public function setCompany(Company $company):void
+    public function set_company(Company $company):void
     {   
 
         if(!$this->company){ 
             
             $this->company = $company;
 
-            $company->addInvoice($this);
+            $company->add_invoice($this);
 
             dump($this->company); //funkcja sprawdzająca
         }
 
     }
 
-    public function setPurchase(Purchase $purchase):void
+    public function set_purchase(Purchase $purchase):void
     {
         if(!$this->purchase){
             $this->purchase = $purchase;
@@ -46,16 +47,16 @@ class Invoice{
 
 
     public function __construct(){
-        $this->id = self::$idCount;
-        self::$idCount++;
+        $this->id = self::$id_count;
+        self::$id_count++;
 
-        $this->invoiceNumber . getDate()["mon"] ."/". self::$invoiceNumberHelper;
-        self::$invoiceNumberHelper++;
+        $this->invoice_number . getDate()["mon"] ."/". self::$invoice_number_helper;
+        self::$invoice_number_helper++;
     }
 
     // private static function getIdCount():int
     // {
-    //     return self::$idCount;
+    //     return self::$id_count;
     // }
 
     private function count_total_price():float
@@ -63,5 +64,6 @@ class Invoice{
         $total_price;
         return $total_price;
     }
+
 
 }
