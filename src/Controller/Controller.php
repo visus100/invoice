@@ -59,6 +59,11 @@ var_dump($purchase);
 
 echo "<br>";
 
+
 var_dump($customer);
+
+
 $View = new View();
 $View->render();
+
+dump(Invoice::get_array_list());

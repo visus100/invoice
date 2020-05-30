@@ -13,15 +13,9 @@ class Worker extends Person
     private $work_position;
     private $purchases = [];
 
-    public function addPurchase(Purchase $purchase):void
-    {   
-        if(!in_array($purchase, $this->purchases)){
-            $this->purchases[]=$purchase;
-            $purchase->setWorker($this);
-        }
-    }
+    private static $worker_list = [];
 
-    public function getWorkerData():array
+    public function getWorkerData(): array
     {
         $workerData["id"] = $this->id;
         $workerData["name"] = $this->name;
@@ -42,6 +36,19 @@ class Worker extends Person
         return $data;
     }
 
+    public static function get_array_list(): array
+    {
+        return self::$worker_list;
+    }
+
+    public function addPurchase(Purchase $purchase): void
+    {
+        if (!in_array($purchase, $this->purchases)) {
+            $this->purchases[] = $purchase;
+            $purchase->setWorker($this);
+        }
+    }
+
     public function __construct(int $id, string $name, string $surname, string $phone, float $salary, array $permissions,  $active, $work_position)
     {
         $this->id = $id;
@@ -52,7 +59,12 @@ class Worker extends Person
         $this->permissions = $permissions;
         $this->active = $active;
         $this->work_position = $work_position;
+
+        $this->add_to_array_list($this);
     }
 
-
+    private function add_to_array_list(self $worker)
+    {
+        self::$worker_list[] = $worker;
+    }
 }

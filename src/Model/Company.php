@@ -10,30 +10,36 @@ class Company extends AbstractModel
     private $nip;   //long have to be changed for string if use countrycode (like pl9519595534)
     private $invoices = [];
 
-    public function addInvoice(Invoice $invoice):void
-    {   
+    private static $company_list = [];
 
-        if(!in_array($invoice, $this->invoices)){  
-            
+    public function addInvoice(Invoice $invoice): void
+    {
+
+        if (!in_array($invoice, $this->invoices)) {
+
             $this->invoices[] = $invoice;
 
             $invoice->setCompany($this);
             echo "<br><br>";
             var_dump($this->invoices);
-    
+
             echo "<br><br>";
         }
-
     }
-    public function getInvoices():array
+    public function getInvoices(): array
     {
         return $this->invoices;
     }
-    public function getCompanyData():array
+    public function getCompanyData(): array
     {
-        return $companyData = ["id"=>$this->id, "name"=>$this->name, "nip"=>$this->nip];
+        return $companyData = ["id" => $this->id, "name" => $this->name, "nip" => $this->nip];
     }
-    
+
+    public function get_array_list(): array
+    {
+        return self::$company_list;
+    }
+
     public function testConnection(array $config): void
     {
         $this->startSQLConnection($config);
@@ -59,5 +65,13 @@ class Company extends AbstractModel
         $this->id = $id;
         $this->name = $name;
         $this->nip = $nip;
+
+        $this->add_to_array_list($this);
+    }
+
+
+    private function add_to_array_list(self $company): void
+    {
+        self::$company_list[] = $company;
     }
 }
