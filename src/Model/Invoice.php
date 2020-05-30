@@ -8,13 +8,13 @@ class Invoice{
     private static $invoiceNumberHelper = 1;
     private $invoiceNumber = "FRA/";
     private static $seller_data = ["name"=>"Itemownia sp. z o.o.", "adress"=>"Fabryczna 5"];  //istotna zmiana
-    
+
     private $company;
     private $purchase;
 
     public function getInvoiceData():array
     {
-        $invoiceData = [...$this->seller_data, "id"=>$this->id, "invoice_number"=>$this->invoiceNumber];
+        $invoiceData = [$this->seller_data["name"], $this->seller_data["adress"], "id"=>$this->id, "invoice_number"=>$this->invoiceNumber];
         return  $invoiceData;
     }
 
