@@ -37,10 +37,11 @@ class Purchase extends AbstractModel
 
 
             //dane informacyjne
-            $query = "SELECT purchase.id, purchase.date_of_order, purchase.id_worker, purchase.id_customer, worker.name, worker.surname, worker.phone, worker.work_position, invoice.invoice_number, invoice.id_company, invoice.id_purchase, invoice.id_worker FROM purchase 
+            $query = "SELECT purchase.id, purchase.date_of_order, purchase.id_worker, purchase.id_customer, customer.name as customer_name, customer.surname as customer_surname, customer.phone as customer_phone, customer.address as customer_address, worker.name as worker_name, worker.surname as worker_surname, worker.phone as worker_phone, worker.salary, worker.permission_id, worker.work_position, invoice.id as invoice_id, invoice.invoice_number, invoice.id_company, invoice.id_purchase, invoice.id_worker, company.id as company_id, company.name as company_name, company.NIP, company.address as company_address FROM purchase 
             INNER JOIN customer ON Purchase.id_customer = customer.id 
             INNER JOIN worker ON Purchase.id_worker = worker.id
-            LEFT JOIN invoice ON Purchase.id = invoice.id_purchase";
+            LEFT JOIN invoice ON Purchase.id = invoice.id_purchase
+            LEFT JOIN company ON Invoice.id_company = Company.id";
             $result = self::$conn->query($query);
             $purchase_data_list = $result->fetchAll(PDO::FETCH_ASSOC); // save all records
 
@@ -97,7 +98,25 @@ class Purchase extends AbstractModel
         $purchase_list = self::get_purchase_from_db($config);
 
         for ($i = 0; $i < count($purchase_list); $i++) {
-            new self($purchase_list[$i]["id"] * 1, $purchase_list[$i]["date_of_order"], $purchase_list[$i]["id_worker"], $purchase_list[$i]["id_customer"]);
+            $object = new self($purchase_list[$i]["id"] * 1, $purchase_list[$i]["date_of_order"], $purchase_list[$i]["id_worker"], $purchase_list[$i]["id_customer"]);
+
+            $customer = new Customer($purchase_list[$i]["id_customer"]*1, $purchase_list[$i]["customer_name"], $purchase_list[$i]["customer_surname"], $purchase_list[$i]["customer_phone"], $purchase_list[$i]["customer_address"]);
+
+            $worker = new Worker($purchase_list[$i]["id_worker"]*1, $purchase_list[$i]["worker_name"], $purchase_list[$i]["worker_surname"], $purchase_list[$i]["worker_phone"], $purchase_list[$i]["salary"]*1, $purchase_list[$i]["permission_id"]*1, $purchase_list[$i]["work_position"]);
+
+            
+
+            $object->set_customer($customer);
+            $object->set_worker($worker);
+            if($purchase_list[$i]["invoice_id"]){
+                $object->create_invoice($purchase_list[$i]["invoice_id"]*1, $purchase_list[$i]["invoice_number"]);
+                $invoice = $object->get_invoice();
+                if($purchase_list[$i]["company_id"]){
+                    $company = new Company($purchase_list[$i]["company_id"]*1, $purchase_list[$i]["company_name"], $purchase_list[$i]["NIP"], $purchase_list[$i]["company_address"]);
+                }
+            }
+
+
         }
     }
 
@@ -125,9 +144,9 @@ class Purchase extends AbstractModel
             $worker->add_purchase($this);
         }
     }
-    public function create_invoice(): void
+    public function create_invoice(int $id, string $invoice_number): void
     {
-        $invoice = new Invoice();
+        $invoice = new Invoice($id, $invoice_number);
         if (!in_array($invoice, $this->invoices)) {
             $this->invoices[] = $invoice;
             $invoice->set_purchase($this);
