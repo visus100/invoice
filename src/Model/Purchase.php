@@ -8,7 +8,7 @@ class Purchase extends AbstractModel
     private $date_of_order;
     private $customer;
     private $worker;
-    private $invoices = [];
+    private $invoices;
     private $total_price;
     private $items = [];
 
@@ -28,13 +28,9 @@ class Purchase extends AbstractModel
 
     private static function get_purchase_from_db(array $config): array
     {
-
         self::startSQLConnection($config);
 
-
-
         try {
-
 
             //dane informacyjne
             $query = "SELECT purchase.id, purchase.date_of_order, purchase.id_worker, purchase.id_customer, customer.name as customer_name, customer.surname as customer_surname, customer.phone as customer_phone, customer.address as customer_address, worker.name as worker_name, worker.surname as worker_surname, worker.phone as worker_phone, worker.salary, worker.permission_id, worker.work_position, invoice.id as invoice_id, invoice.invoice_number, invoice.id_company, invoice.id_purchase, invoice.id_worker, company.id as company_id, company.name as company_name, company.NIP, company.address as company_address FROM purchase 
@@ -44,8 +40,6 @@ class Purchase extends AbstractModel
             LEFT JOIN company ON Invoice.id_company = Company.id";
             $result = self::$conn->query($query);
             $purchase_data_list = $result->fetchAll(PDO::FETCH_ASSOC); // save all records
-
-
 
             //lista towarów w zamówieniu
             $query = "SELECT purchase_item.id_purchase  , purchase_item.id_item, item.name , item.price_per_unit FROM purchase
@@ -83,9 +77,6 @@ class Purchase extends AbstractModel
                 }
             }
 
-
-            dump($db_list);
-
             return $db_list;
         } catch (Throwable $e) {
             echo ('Nie udało się pobrać notatki 400 ' . $e . "<br><br>");
@@ -100,23 +91,22 @@ class Purchase extends AbstractModel
         for ($i = 0; $i < count($purchase_list); $i++) {
             $object = new self($purchase_list[$i]["id"] * 1, $purchase_list[$i]["date_of_order"], $purchase_list[$i]["id_worker"], $purchase_list[$i]["id_customer"]);
 
-            $customer = new Customer($purchase_list[$i]["id_customer"]*1, $purchase_list[$i]["customer_name"], $purchase_list[$i]["customer_surname"], $purchase_list[$i]["customer_phone"], $purchase_list[$i]["customer_address"]);
+            $customer = new Customer($purchase_list[$i]["id_customer"] * 1, $purchase_list[$i]["customer_name"], $purchase_list[$i]["customer_surname"], $purchase_list[$i]["customer_phone"], $purchase_list[$i]["customer_address"]);
 
-            $worker = new Worker($purchase_list[$i]["id_worker"]*1, $purchase_list[$i]["worker_name"], $purchase_list[$i]["worker_surname"], $purchase_list[$i]["worker_phone"], $purchase_list[$i]["salary"]*1, $purchase_list[$i]["permission_id"]*1, $purchase_list[$i]["work_position"]);
+            $worker = new Worker($purchase_list[$i]["id_worker"] * 1, $purchase_list[$i]["worker_name"], $purchase_list[$i]["worker_surname"], $purchase_list[$i]["worker_phone"], $purchase_list[$i]["salary"] * 1, $purchase_list[$i]["permission_id"] * 1, $purchase_list[$i]["work_position"]);
 
-            
+
 
             $object->set_customer($customer);
             $object->set_worker($worker);
-            if($purchase_list[$i]["invoice_id"]){
-                $object->create_invoice($purchase_list[$i]["invoice_id"]*1, $purchase_list[$i]["invoice_number"]);
+            if ($purchase_list[$i]["invoice_id"]) {
+                $object->create_invoice($purchase_list[$i]["invoice_id"] * 1, $purchase_list[$i]["invoice_number"]);
                 $invoice = $object->get_invoice();
-                if($purchase_list[$i]["company_id"]){
-                    $company = new Company($purchase_list[$i]["company_id"]*1, $purchase_list[$i]["company_name"], $purchase_list[$i]["NIP"], $purchase_list[$i]["company_address"]);
+                if ($purchase_list[$i]["company_id"]) {
+                    $company = new Company($purchase_list[$i]["company_id"] * 1, $purchase_list[$i]["company_name"], $purchase_list[$i]["NIP"], $purchase_list[$i]["company_address"]);
+                    $invoice->set_company($company);
                 }
             }
-
-
         }
     }
 
@@ -147,14 +137,14 @@ class Purchase extends AbstractModel
     public function create_invoice(int $id, string $invoice_number): void
     {
         $invoice = new Invoice($id, $invoice_number);
-        if (!in_array($invoice, $this->invoices)) {
-            $this->invoices[] = $invoice;
+        if (!$this->invoices) {
+            $this->invoices = $invoice;
             $invoice->set_purchase($this);
         }
     }
-    public function get_invoice(): Invoice
+    public function get_invoice(): ?Invoice
     {
-        return $this->invoices[0];
+        return $this->invoices;
     }
     public function get_items(): array
     {
@@ -168,6 +158,11 @@ class Purchase extends AbstractModel
     public function get_worker(): Worker
     {
         return $this->worker;
+    }
+
+    public function get_customer(): Customer
+    {
+        return $this->customer;
     }
 
     public function purchase_item(int $quantity): void

@@ -21,7 +21,7 @@ class Invoice extends AbstractModel
         return  $invoice_data;
     }
 
-    public function get_company(): Company
+    public function get_company(): ?Company
     {
         return $this->company;
     }

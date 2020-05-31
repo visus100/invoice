@@ -14,7 +14,7 @@ require "include_top_html.php";
 
 Purchase::create_objects($configuration);
 $purchase_list = Purchase::get_array_list();
-dump($purchase_list);
+//dump($purchase_list);
 
 ?>
 
@@ -31,35 +31,114 @@ dump($purchase_list);
           date of order
         </th>
         <th>
-         id worker
+          w_id
         </th>
         <th>
-         id custumer
+          w_name
         </th>
         <th>
-          name
+          w_surname
         </th>
         <th>
-          surname
+          c_id
         </th>
         <th>
-         phone
+          c_name
         </th>
         <th>
-         id custumer
+          c_surname
         </th>
+        <th>
+          i_id
+        </th>
+        <th>
+          i_number
+        </th>
+        <th>
+          i_id
+        </th>
+        <th>
+          c_name
+        </th>
+        <th>
+          i_nip
+        </th>
+
       </tr>
     </thead>
     <tbody style="line-height:30px;">
 
       <?php
+
+
+
+
       foreach ($purchase_list as $value) {
         echo "<tr>";
-        foreach ($value->get_purchase_data() as $key) {
+        $purchase_data = $value->get_purchase_data();
+
+        foreach ($purchase_data as $key) {
           echo "<td>";
           echo  $key;
           echo "</td>";
         }
+
+        $worker_data = $value->get_worker();
+        $worker_data = $worker_data->get_worker_data();
+
+        echo "<td>";
+        echo  $worker_data["id"];
+        echo "</td>";
+        echo "<td>";
+        echo  $worker_data["name"];
+        echo "</td>";
+        echo "<td>";
+        echo  $worker_data["surname"];
+        echo "</td>";
+
+        $customer_data = $value->get_customer();
+        $customer_data = $customer_data->get_personal_data();
+
+        echo "<td>";
+        echo  $customer_data["id"];
+        echo "</td>";
+        echo "<td>";
+        echo  $customer_data["name"];
+        echo "</td>";
+        echo "<td>";
+        echo  $customer_data["surname"];
+        echo "</td>";
+
+        if ($value->get_invoice()) {
+          $invoice_data = $value->get_invoice();
+
+          $company_data = $invoice_data->get_company();
+          $company_data =  $company_data->getCompanyData();
+
+          $invoice_data = $invoice_data->get_invoice_data();
+
+          echo "<td>";
+          echo  $invoice_data["id"];
+          echo "</td>";
+          echo "<td>";
+          echo  $invoice_data["invoice_number"];
+          echo "</td>";
+          echo "<td>";
+          echo  $company_data["id"];
+          echo "</td>";
+          echo "<td>";
+          echo  $company_data["name"];
+          echo "</td>";
+          echo "<td>";
+          echo  $company_data["nip"];
+          echo "</td>";
+        } else {
+          echo "<td>";
+          echo "</td>";
+          echo "<td>";
+          echo "</td>";
+        }
+
         echo "</tr>";
       }
       ?>
