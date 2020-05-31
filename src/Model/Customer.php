@@ -46,10 +46,10 @@ class Customer extends Person
 
     public static function create_objects(array $config): void
     {
-        $company_list = self::get_custumers_from_db($config);
+        $customer_list = self::get_custumers_from_db($config);
 
-        for ($i = 0; $i < count($company_list); $i++) {
-            new self($company_list[$i]["id"] * 1, $company_list[$i]["name"], $company_list[$i]["surname"], $company_list[$i]["phone"], $company_list[$i]["address"]);
+        for ($i = 0; $i < count($customer_list); $i++) {
+            new self($customer_list[$i]["id"] * 1, $customer_list[$i]["name"], $customer_list[$i]["surname"], $customer_list[$i]["phone"], $customer_list[$i]["address"]);
         }
     }
 

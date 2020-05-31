@@ -1,13 +1,13 @@
 <?php
 
 declare(strict_types=1);
-require_once "src/Model/AbstractModel.php";
 
 class Company extends AbstractModel
 {
     private $id;
     private $name;
     private $nip;   //long have to be changed for string if use countrycode (like pl9519595534)
+    private $address;
     private $invoices = [];
 
     private static $company_list = [];
@@ -44,35 +44,40 @@ class Company extends AbstractModel
     }
     public function get_company_data(): array
     {
-        return $company_data = ["id" => $this->id, "name" => $this->name, "nip" => $this->nip];
+        return $company_data = ["id" => $this->id, "name" => $this->name, "nip" => $this->nip, "address" => $this->address];
     }
-
-    public function testConnection(array $config): void
+    private static function get_companies_from_db(array $config): array
     {
-        $this->startSQLConnection($config);
+
+        self::startSQLConnection($config);
 
         try {
             $query = "SELECT * FROM company";
-            $result = $this->conn->query($query);
-            $company_list = $result->fetchAll(PDO::FETCH_ASSOC); // save all records
-            //$company_list = $result->fetch(PDO::FETCH_ASSOC); // save single record ascending
+            $result = self::$conn->query($query);
+            $db_list = $result->fetchAll(PDO::FETCH_ASSOC); // save all records
 
-
-            echo "<br>Dane z bazy danych tabela Company mysql:<br>";
-            print_r($company_list);
-            echo "<br><br>";
+            return $db_list;
         } catch (Throwable $e) {
             echo ('Nie udało się pobrać notatki 400 ' . $e . "<br><br>");
+            return [];
+        }
+    }
+    public static function create_objects(array $config): void
+    {
+        $company_list = self::get_companies_from_db($config);
+
+        for ($i = 0; $i < count($company_list); $i++) {
+            new self($company_list[$i]["id"] * 1, $company_list[$i]["name"], $company_list[$i]["NIP"], $company_list[$i]["address"]);
         }
     }
 
-    public function __construct(int $id, string $name, string $nip)
+    public function __construct(int $id, string $name, string $nip, string $address)
     {
 
         $this->id = $id;
         $this->name = $name;
         $this->nip = $nip;
-
+        $this->address = $address;
         $this->add_to_array_list($this);
     }
 
