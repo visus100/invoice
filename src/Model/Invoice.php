@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-class Invoice
+class Invoice extends AbstractModel
 {
     private static $id_count = 1;
     private $id;
@@ -29,6 +29,49 @@ class Invoice
     public static function get_array_list(): array
     {
         return self::$invoice_list;
+    }
+
+    public function get_invoice_data(): array
+    {
+        $data = ["id" => $this->id, "invoice_number" => $this->invoice_number];
+
+        return $data;
+    }
+
+    private static function get_invoice_from_db(array $config): array
+    {
+
+        self::startSQLConnection($config);
+
+        try {
+            $query = "SELECT * FROM Invoice";
+            $result = self::$conn->query($query);
+            $db_list = $result->fetchAll(PDO::FETCH_ASSOC); // save all records
+
+            return $db_list;
+        } catch (Throwable $e) {
+            echo ('Nie udało się pobrać notatki 400 ' . $e . "<br><br>");
+            return [];
+        }
+    }
+
+    public static function create_objects(array $config): void
+    {
+        $invoice_list = self::get_invoice_from_db($config);
+
+        for ($i = 0; $i < count($invoice_list); $i++) {
+            new self($invoice_list[$i]["id"] * 1, $invoice_list[$i]["invoice_number"], $invoice_list[$i]["id_company"], $invoice_list[$i]["id_purchase"], $invoice_list[$i]["id_worker"]);
+        }
+    }
+
+    public static function new_object(int $id, string $name, string $surname, string $phone, string $address): void
+    {
+        //insert to db functions...
+
+        //if success
+        $new_obj = new self($id,  $name,  $surname,  $phone,  $address);
+        //else
+        //errorr
     }
 
     public function set_company(Company $company): void
