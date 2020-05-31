@@ -16,20 +16,45 @@ $customer_list = Customer::get_array_list();
 
 ?>
 
-<div>Customer list</div>
+<div style="padding-bottom:10px;">Customer list</div>
 
 <div>
-  <?php
+  <table style="border: 1px solid black;">
+    <thead>
+      <tr style="background-color: silver;">
+        <th>
+          id
+        </th>
+        <th>
+          name
+        </th>
+        <th>
+          surname
+        </th>
+        <th>
+          phone
+        </th>
+        <th>
+          address
+        </th>
+      </tr>
+    </thead>
+    <tbody style="line-height:30px;">
 
-  foreach ($customer_list as $value) {
+      <?php
+      foreach ($customer_list as $value) {
+        echo "<tr>";
+        foreach ($value->get_personal_data() as $key) {
+          echo "<td>";
+          echo  $key;
+          echo "</td>";
+        }
+        echo "</tr>";
+      }
+      ?>
 
-    print_r($value->get_personal_data());
-
-    echo "<br>";
-  }
-
-  ?>
-
+    </tbody>
+  </table>
 </div>
 
 <?php
