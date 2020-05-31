@@ -27,13 +27,13 @@ $invoice_list = Invoice::get_array_list();
           invoice number
         </th>
         <th>
-          surname
+          company
         </th>
         <th>
-          phone
+          purchase
         </th>
         <th>
-          address
+          worker
         </th>
       </tr>
     </thead>

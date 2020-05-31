@@ -64,12 +64,12 @@ class Invoice extends AbstractModel
         }
     }
 
-    public static function new_object(int $id, string $name, string $surname, string $phone, string $address): void
+    public static function new_object(int $id, string $invoice_number): void
     {
         //insert to db functions...
 
         //if success
-        $new_obj = new self($id,  $name,  $surname,  $phone,  $address);
+        $new_obj = new self($id,  $invoice_number);
         //else
         //errorr
     }
@@ -92,13 +92,15 @@ class Invoice extends AbstractModel
         }
     }
 
-    public function __construct()
+    public function __construct(int $id, string $invoice_number)
     {
-        $this->id = self::$id_count;
+        $this->id = $id;
+        $this->invoice_number = $invoice_number;
+        //   $this->id = self::$id_count;
         self::$id_count++;
 
-        $this->invoice_number . getDate()["mon"] . "/" . self::$invoice_number_helper;
-        self::$invoice_number_helper++;
+        //   $this->invoice_number . getDate()["mon"] . "/" . self::$invoice_number_helper;
+        //   self::$invoice_number_helper++;
 
         $this->add_to_array_list($this);
     }
