@@ -29,9 +29,9 @@ class Worker extends Person
     }
 
     //use like up or down
-    public function get_personal_data(int $id): array
+    public function get_personal_data(): array
     {
-        $data = ["name" => $this->name, "surname" => $this->surname, "phone" => $this->phone, "salary" => $this->salary, "permissions" => $this->permissions, "active" => $this->active, "work_position" => $this->work_position];
+        $data = ["id"=>$this->id, "name" => $this->name, "surname" => $this->surname, "phone" => $this->phone, "salary" => $this->salary, "permissions" => $this->permissions, "active" => $this->active, "work_position" => $this->work_position];
 
         return $data;
     }
@@ -41,6 +41,28 @@ class Worker extends Person
         return self::$worker_list;
     }
 
+    private static function get_workers_from_db(array $config): array
+    {
+        self::startSQLConnection($config);
+        try {
+            $query = "SELECT * FROM worker";
+            $result = self::$conn->query($query);
+            $db_list = $result->fetchAll(PDO::FETCH_ASSOC); // save all records
+
+            return $db_list;
+        } catch (Throwable $e) {
+            echo ('Nie udało się pobrać notatki 400 ' . $e . "<br><br>");
+            return [];
+        }
+    }
+
+    public static function create_objects(array $config): void
+    {
+        $worker_list = self::get_workers_from_db($config);
+        for ($i = 0; $i < count($worker_list); $i++) {
+            new self($worker_list[$i]["id"] * 1, $worker_list[$i]["name"], $worker_list[$i]["surname"], $worker_list[$i]["phone"], $worker_list[$i]["salary"]*1, $worker_list[$i]["permission_id"]*1, $worker_list[$i]["work_position"]);
+        }
+    }
     public function add_purchase(Purchase $purchase): void
     {
         if (!in_array($purchase, $this->purchases)) {
@@ -49,7 +71,7 @@ class Worker extends Person
         }
     }
 
-    public function __construct(int $id, string $name, string $surname, string $phone, float $salary, array $permissions,  $active, $work_position)
+    public function __construct(int $id, string $name, string $surname, string $phone, float $salary, int $permissions, $work_position)
     {
         $this->id = $id;
         $this->name = $name;
@@ -57,7 +79,6 @@ class Worker extends Person
         $this->phone = $phone;
         $this->salary = $salary;
         $this->permissions = $permissions;
-        $this->active = $active;
         $this->work_position = $work_position;
 
         $this->add_to_array_list($this);
