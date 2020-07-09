@@ -7,3 +7,4 @@ require_once "src/Model/Model.php";
 
 $View = new View();
 $View->render();
+//test
